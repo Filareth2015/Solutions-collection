@@ -1,4 +1,3 @@
-R_snippets
-==========
+# Heatmaps
 
-R Scripts for general data analysis and plotting
+R Scripts for heatmaps
