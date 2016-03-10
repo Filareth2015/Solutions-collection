@@ -1,3 +1,3 @@
 # Heatmaps
 
-R Scripts examples
+R scripts examples
