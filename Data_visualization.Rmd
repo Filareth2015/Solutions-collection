@@ -1,5 +1,5 @@
 ---
-title: "Data Visualization"
+title: "Data Visualization with JavaScript powered packages"
 author: "Zanin Pavel"
 date: "March 10, 2016"
 output: html_document
@@ -9,11 +9,26 @@ output: html_document
 
 [Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection)
 
+HTML widgets work just like R plots except they produce interactive web visualizations. A line or two of R code is all it takes to produce a D3 graphic or Leaflet map.   
+
 All examples were took from [htmlwidgets](http://www.htmlwidgets.org/showcase_leaflet.html) 
+
+Examples list:     
+1. Geo-spatial mapping    
+2. Time series charting   
+3. Interactive graphics    
+4. Highcharts   
+5. Graph visualization   
+6. Interactive heatmap    
+7. Tabular data dysplay    
+8. 3D scatterplot and 3D globe    
+9. Renders WebGL scenes    
+10. Diagrams and flowcharts    
+11. Scatterplots, line charts, and histograms    
 
 ## Geo-spatial mapping
 
-```{r}
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(leaflet)
 
 m <- leaflet() %>%
@@ -22,10 +37,134 @@ m <- leaflet() %>%
 m  # Print the map
 ```
 
-```{r}
+
+
+## Time series charting
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(dygraphs)
+dygraph(nhtemp, main = "New Haven Temperatures") %>% 
+  dyRangeSelector(dateWindow = c("1920-01-01", "1960-01-01"))
+```
+
+
+## Interactive graphics
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(plotly)
+p <- ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+            geom_bar(position = "dodge")
+ggplotly(p)
+```
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+d <- diamonds[sample(nrow(diamonds), 500), ]
+plot_ly(d, x = carat, y = price, text = paste("Clarity: ", clarity),
+        mode = "markers", color = carat, size = carat)
+```
+
+
+## Highcharts
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(magrittr)
+library(highcharter)
+highchart() %>% 
+  hc_title(text = "Scatter chart with size and color") %>% 
+  hc_add_serie_scatter(mtcars$wt, mtcars$mpg,
+                       mtcars$drat, mtcars$hp)
+```
+
+## Graph visualization
+
+### vis.js
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(visNetwork)
+nodes <- data.frame(id = 1:6, title = paste("node", 1:6), 
+                    shape = c("dot", "square"),
+                    size = 10:15, color = c("blue", "red"))
+edges <- data.frame(from = 1:5, to = c(5, 4, 6, 3, 3))
+visNetwork(nodes, edges) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
+```
+
+### D3
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(networkD3)
 data(MisLinks, MisNodes)
 forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
              Target = "target", Value = "value", NodeID = "name",
              Group = "group", opacity = 0.4)
+```
+
+## Interactive heatmap
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(d3heatmap)
+d3heatmap(mtcars, scale="column", colors="Blues")
+```
+
+## Tabular data dysplay
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(DT)
+datatable(iris, options = list(pageLength = 5))
+```
+
+## 3D scatterplot and 3D globe
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(threejs)
+z <- seq(-10, 10, 0.01)
+x <- cos(z)
+y <- sin(z)
+scatterplot3js(x,y,z, color=rainbow(length(z)))
+```
+
+## Renders WebGL scenes
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(rgl)
+library(rglwidget)
+library(htmltools)
+
+theta <- seq(0, 6*pi, len=100)
+xyz <- cbind(sin(theta), cos(theta), theta)
+lineid <- plot3d(xyz, type="l", alpha = 1:0, 
+                 lwd = 5, col = "blue")["data"]
+
+browsable(tagList(
+  rglwidget(elementId = "example", width = 500, height = 400,
+            controllers = "player"),
+  playwidget("example", 
+             ageControl(births = theta, ages = c(0, 0, 1),
+                        objids = lineid, alpha = c(0, 1, 0)),
+                        start = 1, stop = 6*pi, step = 0.1, 
+                        rate = 6,elementId = "player")
+))
+```
+
+
+## Diagrams and flowcharts
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(DiagrammeR)
+grViz("
+  digraph {
+    layout = twopi
+    node [shape = circle]
+    A -> {B C D} 
+  }")
+```
+
+
+## Scatterplots, line charts, and histograms
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(metricsgraphics)
+mjs_plot(mtcars, x=wt, y=mpg) %>%
+  mjs_point(color_accessor=carb, size_accessor=carb) %>%
+  mjs_labs(x="Weight of Car", y="Miles per Gallon")
 ```
