@@ -1,0 +1,31 @@
+---
+title: "Data Visualization"
+author: "Zanin Pavel"
+date: "March 10, 2016"
+output: html_document
+---
+
+# Introduction
+
+[Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection)
+
+All examples were took from [htmlwidgets](http://www.htmlwidgets.org/showcase_leaflet.html) 
+
+## Geo-spatial mapping
+
+```{r}
+library(leaflet)
+
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=30.316163, lat=59.939029, popup="Saint Petersburg, Palace square")
+m  # Print the map
+```
+
+```{r}
+library(networkD3)
+data(MisLinks, MisNodes)
+forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
+             Target = "target", Value = "value", NodeID = "name",
+             Group = "group", opacity = 0.4)
+```
