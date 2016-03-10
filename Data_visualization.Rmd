@@ -4,10 +4,11 @@ author: "Zanin Pavel"
 date: "March 10, 2016"
 output: html_document
 ---
+[Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection)     
+[Link to project on RPubs](http://rpubs.com/Zanin_Pavel/159959)
 
 # Introduction
 
-[Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection)
 
 HTML widgets work just like R plots except they produce interactive web visualizations. A line or two of R code is all it takes to produce a D3 graphic or Leaflet map.   
 
@@ -26,7 +27,7 @@ Examples list:
 10. Diagrams and flowcharts    
 11. Scatterplots, line charts, and histograms    
 
-## Geo-spatial mapping
+### Geo-spatial mapping
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(leaflet)
@@ -39,7 +40,7 @@ m  # Print the map
 
 
 
-## Time series charting
+### Time series charting
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(dygraphs)
@@ -48,7 +49,7 @@ dygraph(nhtemp, main = "New Haven Temperatures") %>%
 ```
 
 
-## Interactive graphics
+### Interactive graphics
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(plotly)
@@ -64,7 +65,7 @@ plot_ly(d, x = carat, y = price, text = paste("Clarity: ", clarity),
 ```
 
 
-## Highcharts
+### Highcharts
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(magrittr)
@@ -75,9 +76,9 @@ highchart() %>%
                        mtcars$drat, mtcars$hp)
 ```
 
-## Graph visualization
+### Graph visualization
 
-### vis.js
+#### vis.js
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(visNetwork)
@@ -89,7 +90,7 @@ visNetwork(nodes, edges) %>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
 ```
 
-### D3
+#### D3
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(networkD3)
@@ -99,21 +100,21 @@ forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
              Group = "group", opacity = 0.4)
 ```
 
-## Interactive heatmap
+### Interactive heatmap
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(d3heatmap)
 d3heatmap(mtcars, scale="column", colors="Blues")
 ```
 
-## Tabular data dysplay
+### Tabular data dysplay
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(DT)
 datatable(iris, options = list(pageLength = 5))
 ```
 
-## 3D scatterplot and 3D globe
+### 3D scatterplot and 3D globe
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(threejs)
@@ -123,7 +124,7 @@ y <- sin(z)
 scatterplot3js(x,y,z, color=rainbow(length(z)))
 ```
 
-## Renders WebGL scenes
+### Renders WebGL scenes
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(rgl)
@@ -147,7 +148,7 @@ browsable(tagList(
 ```
 
 
-## Diagrams and flowcharts
+### Diagrams and flowcharts
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(DiagrammeR)
@@ -160,7 +161,7 @@ grViz("
 ```
 
 
-## Scatterplots, line charts, and histograms
+### Scatterplots, line charts, and histograms
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 library(metricsgraphics)
