@@ -1,0 +1,26 @@
+---
+title: "Simple statistic"
+author: "Zanin Pavel"
+date: "March 12, 2016"
+output: html_document
+---
+
+[link on GitHUB](https://www.youtube.com/watch?t=672&v=5Dnw46eC-0o)
+
+## Introduction
+
+Here I'm going to answer on next question: Does drinking beer make you more attractive to mosquitos?
+
+Idea based on [link](https://www.youtube.com/watch?t=672&v=5Dnw46eC-0o)
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
