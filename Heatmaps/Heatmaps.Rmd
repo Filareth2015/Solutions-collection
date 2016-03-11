@@ -4,8 +4,8 @@ author: "Zanin Pavel"
 date: "March 11, 2016"
 output: html_document
 ---
-[Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection/tree/master/Heatmaps)     
-[Link to project on RPubs](http://rpubs.com/Zanin_Pavel/160113) 
+[Link to project files on GitHUB](https://github.com/Filareth2015/Solutions-collection/tree/master/Heatmaps)     
+[Link to projects on RPubs](http://rpubs.com/Zanin_Pavel/160113) 
 
 
 ## Introduction
