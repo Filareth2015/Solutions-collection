@@ -1,0 +1,64 @@
+---
+title: "Heatmaps"
+author: "Zanin Pavel"
+date: "March 11, 2016"
+output: html_document
+---
+[Link to project on GitHUB](https://github.com/Filareth2015/Solutions-collection/tree/master/Heatmaps)     
+[Link to project on RPubs](  ) 
+
+
+## Introduction
+
+Here I'm going to show some basic heatmaps.
+
+### Simple heatmap 1
+
+```{r, , collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+
+library(gplots)
+library(RColorBrewer)
+
+# 1. Reading in data and transform it to matrix format
+
+data <- read.csv("dataset.csv", comment.char="#")
+rnames <- data[,1]                            # assign labels in column 1 to "rnames"
+mat_data <- data.matrix(data[,2:ncol(data)])  # transform column 2-5 into a matrix
+rownames(mat_data) <- rnames                  # assign row names 
+
+# 2. Customizing and plotting heatmap
+
+# 2.1 Creates a own color palette from red to green    
+
+my_palette <- colorRampPalette(c("white", "#FCF14C", "red"))(n = 799)   
+
+# 2.2 Defining the color breaks manually for a "skewed" color transition
+
+breaks <- c(seq(-1, 0,length=300),seq(0.001,0.5,length=300),seq(0.501,1,length=200))
+
+# 2.3 Creating heatmap
+
+heatmap.2(mat_data, 
+  cellnote = mat_data,  # same data set for cell labels
+  main = "Correlation", # heat map title
+  notecol="black",      # change font color of cell labels to black
+  density.info="none",  # turns off density plot inside color legend
+  trace="none",         # turns off trace lines inside the heat map
+  margins =c(12,9),     # widens margins around plot
+  col=my_palette,       # use on color palette defined earlier 
+  breaks=breaks,    # enable color transition at specified limits
+  dendrogram="row",     # only draw a row dendrogram
+  Colv="NA")            # turn off column clustering)
+
+dev.off()
+```
+
+    
+Let's make the same graph by d3heatmap package:
+
+```{r, , collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
+library(d3heatmap)
+d3heatmap(mat_data, scale="column", color = scales::col_quantile("Reds", NULL, 5))
+```
+
+
