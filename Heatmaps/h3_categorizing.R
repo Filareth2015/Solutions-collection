@@ -50,7 +50,7 @@ heatmap.2(mat_data,
 # adding a color legend for the categories
 par(lend = 1)           # square line ends  for the color legend
 legend("topright",      # location of the legend on the heatmap plot
-    legend = c("red", "yellow", "green"), # category labels
+    legend = c("category1", "category2", "category3"), # category labels
     col = c("gray", "blue", "black"),  # color key
     lty = 1,            # line style
     lwd = 10,           # line width

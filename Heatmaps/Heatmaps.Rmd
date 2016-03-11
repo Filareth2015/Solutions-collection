@@ -61,7 +61,7 @@ library(d3heatmap)
 d3heatmap(mat_data, scale="column", color = scales::col_quantile("Reds", NULL, 5))
 ```
 
-### Heatmap with clusterization
+### Heatmap with clustering
 ```{r, , collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 # 1. Reading in data and transform it to matrix format
 
@@ -107,7 +107,7 @@ heatmap.2(mat_data,
 dev.off()
 ```
 
-### Heatmap with categorazing
+### Heatmap with clustering and categorazing
 ```{r, , collapse = TRUE, warning=FALSE, message = FALSE, echo=TRUE, results='markup'}
 
 library(gplots)
@@ -130,12 +130,24 @@ my_palette <- colorRampPalette(c("white", "#FCF14C", "red"))(n = 799)
 
 breaks <- c(seq(-1, 0,length=300),seq(0.001,0.5,length=300),seq(0.501,1,length=200))
 
+# 3. Changes the distance measure and clustering method
+
+# NOTE: Matrix here not symmetrical. For symmetrical matrices
+# only one distance and cluster could and SHOULD be defined.
+# Distance options: euclidean (default), maximum, canberra, binary, minkowski, manhattan
+# Cluster options: complete (default), single, average, mcquitty, median, centroid, ward
+
+row_distance = dist(mat_data, method = "manhattan")
+row_cluster = hclust(row_distance, method = "ward")
+col_distance = dist(t(mat_data), method = "manhattan")
+col_cluster = hclust(col_distance, method = "ward")
+
 heatmap.2(mat_data, 
   cellnote = mat_data,  # same data set for cell labels
   RowSideColors = c(    # grouping row-variables into different
      rep("blue", 3),   # categories, Measurement 1-3: green
-     rep("black", 5),    # Measurement 4-6: blue
-     rep("green", 2)),    # Measurement 7-10: red
+     rep("black", 5),    # Measurement 4-8: blue
+     rep("green", 2)),    # Measurement 9-10: red
   main = "Categories",  # heat map title
   notecol="black",      # change font color of cell labels to black
   density.info="none",  # turns off density plot inside color legend
@@ -143,13 +155,13 @@ heatmap.2(mat_data,
   margins =c(16,16),     # widens margins around plot
   col=my_palette,       # use on color palette defined earlier 
   breaks=breaks,    # enable color transition at specified limits
-  dendrogram="row",     # only draw a row dendrogram
-  Colv="NA")            # turn off column clustering
+  Rowv = as.dendrogram(row_cluster), # apply default clustering method
+  Colv = as.dendrogram(col_cluster)) # apply default clustering method
 
 # adding a color legend for the categories
 par(lend = 1)           # square line ends  for the color legend
 legend("topright",      # location of the legend on the heatmap plot
-    legend = c("1", "2", "3"), # category labels
+    legend = c("A", "B", "C"), # category labels
     col = c("blue", "black", "green"),  # color key
     lty = 1,            # line style
     lwd = 10,           # line width
