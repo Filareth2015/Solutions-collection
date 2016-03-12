@@ -78,12 +78,18 @@ t.test(Count ~ Type, data = dataset)$conf.int
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
 group <- as.character(dataset$Type)
-testStat <- function(w, g) {mean(w[g == "Beer"]) - mean(w[g == "Water"])}
-observedStat <- testStat(dataset$Count, group)
-permutations <- sapply(1 : 10000, function(i) testStat(dataset$Count, sample(group)))
 
-hist(permutations)
-abline(v = observedStat, lwd=3)
+testStat <- function(w, g) {mean(w[g == "Beer"]) - mean(w[g == "Water"])}
+
+observedStat <- testStat(dataset$Count, group)
+observedStat
+
+permutations <- sapply(1 : 50000, function(i) testStat(dataset$Count, sample(group)))
+mean(permutations > observedStat)
+
+hist(permutations, col = "#62829C", breaks = 50000)
+abline(v = observedStat, lwd=3, col = "red")
+abline(v = 0, lwd=2, col = "blue", se = FALSE)
 ```
 
 
