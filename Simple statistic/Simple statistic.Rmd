@@ -5,22 +5,85 @@ date: "March 12, 2016"
 output: html_document
 ---
 
-[link on GitHUB](https://www.youtube.com/watch?t=672&v=5Dnw46eC-0o)
+[Link on GitHUB](https://github.com/Filareth2015/Solutions-collection/tree/master/Simple%20statistic)
 
 ## Introduction
 
 Here I'm going to answer on next question: Does drinking beer make you more attractive to mosquitos?
 
-Idea based on [link](https://www.youtube.com/watch?t=672&v=5Dnw46eC-0o)
+Ideas and data were took from examples in [link](https://www.youtube.com/watch?t=672&v=5Dnw46eC-0o)
 
-```{r}
-summary(cars)
+List of activities:    
+* Expolratory data analysis    
+* Test of hypotheses     
+* Permutation test    
+
+
+## Expolratory data analysis
+
+Reading the data
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+library(ggplot2) #loading neccesary library
+library(dplyr)
+
+set.seed(12345)
+
+dataset <- read.csv("dataset.csv", head=TRUE) 
+
 ```
 
-You can also embed plots, for example:
 
-```{r, echo=FALSE}
-plot(cars)
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+summary(dataset)
+head(dataset)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+means <- dataset %>%
+  group_by(Type) %>%
+  summarise(mean(Count))
+means
+```
+
+Difference between Beer and Water means:
+```{r, echo=FALSE, collapse = TRUE, warning=FALSE, message = FALSE}
+water <- filter(dataset, Type =="Water") 
+
+beer <- filter(dataset, Type =="Beer") 
+
+observedStat <- mean(beer$Count) - mean(water$Count)
+observedStat
+```
+
+For the next step let's make exploratory plot's for this data:
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+g <- ggplot(dataset, aes(dataset$Type, dataset$Count, fill = Type, ymin = 10, ymax = 30)) +
+  geom_point(colour = "red", size = 4) + 
+  geom_boxplot(aes(fill = dataset$Type)) +
+  labs(title="The number of bites by mosquitoes", 
+    x="Subjects",
+    y="Count")
+g
+```
+
+## Test of hypotheses 
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+t.test(Count ~ Type, data = dataset)$p.value
+
+t.test(Count ~ Type, data = dataset)$conf.int
+```
+
+## Permutation test
+
+```{r, collapse = TRUE, warning=FALSE, message = FALSE}
+group <- as.character(dataset$Type)
+testStat <- function(w, g) {mean(w[g == "Beer"]) - mean(w[g == "Water"])}
+observedStat <- testStat(dataset$Count, group)
+permutations <- sapply(1 : 10000, function(i) testStat(dataset$Count, sample(group)))
+
+hist(permutations)
+abline(v = observedStat, lwd=3)
+```
+
+

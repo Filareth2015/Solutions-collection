@@ -8,7 +8,7 @@ dataset <- read.csv("dataset.csv", head=TRUE)
 summary(dataset)
 head(dataset)
 
-g <- ggplot(dataset, aes(dataset$Type, dataset$Count, fill = Type)) +
+g <- ggplot(dataset, aes(dataset$Type, dataset$Count, fill = Type, ymin = 10, ymax = 30)) +
   geom_point(colour = "red", size = 4) + 
   geom_boxplot(aes(fill = dataset$Type))
 g
@@ -45,3 +45,7 @@ group <- as.character(dataset$Type)
 testStat <- function(w, g) {mean(w[g == "Beer"]) - mean(w[g == "Water"])}
 observedStat <- testStat(dataset$Count, group)
 permutations <- sapply(1 : 10000, function(i) testStat(dataset$Count, sample(group)))
+
+hist(permutations)
+abline(v = observedStat, lwd=3)
+
