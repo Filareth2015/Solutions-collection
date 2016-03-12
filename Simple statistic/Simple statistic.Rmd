@@ -1,5 +1,5 @@
 ---
-title: "Simple statistic"
+title: "Does drinking beer make you more attractive to mosquitos?"
 author: "Zanin Pavel"
 date: "March 12, 2016"
 output: html_document
@@ -18,12 +18,14 @@ List of activities:
 * Test of hypotheses     
 * Permutation test    
 
+## Data processing
 
-## Expolratory data analysis
+### Expolratory data analysis
 
 Reading the data
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
-library(ggplot2) #loading neccesary library
+
+library(ggplot2) 
 library(dplyr)
 
 set.seed(12345)
@@ -32,12 +34,14 @@ dataset <- read.csv("dataset.csv", head=TRUE)
 
 ```
 
-
+Look at the data quickly with summary() and head().
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
 summary(dataset)
 head(dataset)
 ```
+So, we have 25 records for subjects, who drunk beer and 18 for who drunk water.
 
+Let's calculate mean for each group
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
 means <- dataset %>%
   group_by(Type) %>%
@@ -45,7 +49,7 @@ means <- dataset %>%
 means
 ```
 
-Difference between Beer and Water means:
+Difference between beer and water means:
 ```{r, echo=FALSE, collapse = TRUE, warning=FALSE, message = FALSE}
 water <- filter(dataset, Type =="Water") 
 
@@ -66,7 +70,11 @@ g <- ggplot(dataset, aes(dataset$Type, dataset$Count, fill = Type, ymin = 10, ym
 g
 ```
 
-## Test of hypotheses 
+**Infer:** Difference between means (`r round(observedStat, 2)`). Is it a sufficient evidence to claim that drinking beer makes you more attractive for moquitos?  
+
+### Hypotheses test 
+
+Let's test null hypithesis: means for each types are equal.
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
 t.test(Count ~ Type, data = dataset)$p.value
@@ -74,7 +82,16 @@ t.test(Count ~ Type, data = dataset)$p.value
 t.test(Count ~ Type, data = dataset)$conf.int
 ```
 
-## Permutation test
+**Infer:**  P-value less than significance level (0.05), so we reject null hypothesis. Means for each types are different. 
+
+
+### Permutation test
+
+Let's test null hypothesis that the labels are irrelevant (exchangeable). This is a handy way to create a null distribution for our test statistic by simply permuting the labels over and over and seeing how extreme our data are with respect to this permuted distribution. The procedure would be as follows:      
+1. consider a data from with count and type,         
+2. permute the type (group) labels,     
+3. recalculate the statistic (such as the difference in means),     
+4. calculate the percentage of simulations where the simulated statistic was more extreme (toward the alternative) than the observed.  
 
 ```{r, collapse = TRUE, warning=FALSE, message = FALSE}
 group <- as.character(dataset$Type)
@@ -85,11 +102,14 @@ observedStat <- testStat(dataset$Count, group)
 observedStat
 
 permutations <- sapply(1 : 50000, function(i) testStat(dataset$Count, sample(group)))
-mean(permutations > observedStat)
+round(mean(permutations > observedStat, 3))
 
 hist(permutations, col = "#62829C", breaks = 50000)
 abline(v = observedStat, lwd=3, col = "red")
 abline(v = 0, lwd=2, col = "blue", se = FALSE)
 ```
 
+**Infer:**  We reject null hypothesis. Data for both types have differences. 
 
+## Conclusions
+Drinking beer makes you more attractive for mosquitos.
